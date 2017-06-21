@@ -85,6 +85,7 @@ function parseCSS(code) {
 			}
 		}
 	}
+
 	return parsed.innerHTML
 }
 function modifyRoomIntro(action, editor) {
@@ -103,12 +104,12 @@ var Range = ace.require('ace/range').Range
 session.setOption("useWorker", false)
 session.setMode('ace/mode/html')
 session.setUseWrapMode(true)
+editor.on('change', modifyRoomIntro)
+editor.selection.setRange(new Range(0, 0, true))
 var code = localStorage.getItem('code')
 if (code) {
 	editor.getSession().setValue(code)
 }
-editor.on('change', modifyRoomIntro)
-editor.selection.setRange(new Range(0, 0, true))
 editor.focus()
 modifyRoomIntro(null, editor)
 </script>
