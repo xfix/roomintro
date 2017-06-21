@@ -88,7 +88,10 @@ function parseCSS(code) {
 	return parsed.innerHTML
 }
 function modifyRoomIntro(action, editor) {
-	var value = parseCSS(editor.getSession().getValue())
+	var rawValue = editor.getSession().getValue()
+	localStorage.setItem('code', rawValue)
+
+	var value = parseCSS(rawValue)
 	document.getElementById('html-caja-output').innerHTML = Tools.sanitizeHTML(value)
 	var sanitizer = document.createElement('div')
 	sanitizer.innerHTML = value
@@ -100,6 +103,10 @@ var Range = ace.require('ace/range').Range
 session.setOption("useWorker", false)
 session.setMode('ace/mode/html')
 session.setUseWrapMode(true)
+var code = localStorage.getItem('code')
+if (code) {
+	editor.getSession().setValue(code)
+}
 editor.on('change', modifyRoomIntro)
 editor.selection.setRange(new Range(0, 0, true))
 editor.focus()
