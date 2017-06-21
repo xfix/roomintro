@@ -63,8 +63,32 @@
 <script src="https://play.pokemonshowdown.com/js/lib/html-css-sanitizer-minified.js"></script>
 <script src="https://play.pokemonshowdown.com/js/battledata.js"></script>
 <script>
+function parseCSS(code) {
+	var parsed = document.createElement('div')
+	parsed.innerHTML = code
+
+	var implDocument = document.implementation.createHTMLDocument("Temporary CSS storage")
+
+	var stylesheets = parsed.getElementsByTagName('style')
+	for (var i = 0; i < stylesheets.length; i++) {
+		var element = stylesheets[i]
+		// CSS element needs to be in document to be actually parsed
+		implDocument.body.appendChild(element)
+		var rules = element.sheet.cssRules
+		for (var j = 0; j < rules.length; j++) {
+			var rule = rules[j]
+			var elements = parsed.querySelectorAll(rule.selectorText)
+			for (var k = 0; k < elements.length; k++) {
+				var element = elements[k]
+				var newValue = (element.getAttribute('style') || "") + rule.style.cssText
+				element.setAttribute('style', newValue)
+			}
+		}
+	}
+	return parsed.innerHTML
+}
 function modifyRoomIntro(action, editor) {
-	var value = editor.getSession().getValue()
+	var value = parseCSS(editor.getSession().getValue())
 	document.getElementById('html-caja-output').innerHTML = Tools.sanitizeHTML(value)
 	var sanitizer = document.createElement('div')
 	sanitizer.innerHTML = value
