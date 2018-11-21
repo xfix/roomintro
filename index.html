@@ -92,7 +92,7 @@ function modifyRoomIntro(action, editor) {
 	localStorage.setItem('code', rawValue)
 
 	var value = parseCSS(rawValue)
-	document.getElementById('html-caja-output').innerHTML = Tools.sanitizeHTML(value)
+	document.getElementById('html-caja-output').innerHTML = BattleLog.sanitizeHTML(value)
 	var sanitizer = document.createElement('div')
 	sanitizer.innerHTML = value
 	document.getElementById('html-intro-code').textContent = sanitizer.innerHTML
