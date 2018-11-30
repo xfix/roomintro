@@ -38,6 +38,9 @@
 <div id="header" class="header">
 	<h1>Room intro tool</h1>
 	<div class="maintabbarbottom"></div>
+	<div class="userbar">
+		<button class="button" id="dark">Toggle Dark Mode</button>
+	</div>
 </div>
 <div class="ps-room ps-room-light scrollable" id="html-input">
 	<div id="html-editor">Feel free to modify the room intro. The changes will be visible here.</div>
@@ -111,4 +114,14 @@ if (code) {
 }
 editor.focus()
 modifyRoomIntro(null, editor)
+$('#dark').on('click', function () {
+	var $html = $('html')
+	if ($html.hasClass('dark')) {
+		editor.setTheme('ace/theme/textmate')
+		$html.removeClass('dark')
+	} else {
+		editor.setTheme('ace/theme/twilight')
+		$html.addClass('dark')
+	}
+})
 </script>
