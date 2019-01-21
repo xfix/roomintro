@@ -51,6 +51,7 @@
 			<div class="notice"><div class="infobox infobox-limited" id="html-caja-output"></div></div>
 			<div class="notice">Source:</div>
 			<div class="notice"><div class="infobox"><code>/roomintro <span id="html-intro-code"></span></code></div></div>
+			<div class="notice"></div>
 		</div>
 
 	</div>
@@ -93,7 +94,12 @@ function parseCSS(code) {
 
 	return parsed.innerHTML
 }
+var removableListeners = []
 function modifyRoomIntro(action, editor) {
+	for (var i = 0; i < removableListeners.length; i++) {
+		removableListeners[i]()
+	}
+	removableListeners = []
 	var rawValue = editor.getSession().getValue()
 	localStorage.setItem('code', rawValue)
 
@@ -101,6 +107,24 @@ function modifyRoomIntro(action, editor) {
 	document.getElementById('html-caja-output').innerHTML = BattleLog.sanitizeHTML(value)
 	var sanitizer = document.createElement('div')
 	sanitizer.innerHTML = value
+	var images = sanitizer.getElementsByTagName('img')
+	for (var i = 0; i < images.length; i++) {
+		var image = images[i]
+		var listener = function listener() {
+			this.setAttribute("width", this.width)
+			this.setAttribute("height", this.height)
+			updateCode(sanitizer)
+		}
+		removableListeners.push(function removeListenerIife(image, listener) {
+			return function removeListener() {
+				image.removeEventListener('load', listener)
+			}
+		}(image, listener))
+		image.addEventListener('load', listener)
+	}
+	updateCode(sanitizer)
+}
+function updateCode(sanitizer) {
 	document.getElementById('html-intro-code').textContent = sanitizer.innerHTML
 }
 var editor = ace.edit('html-editor')
