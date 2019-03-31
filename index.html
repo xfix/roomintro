@@ -70,7 +70,7 @@ window.global = window
 <script src="https://play.pokemonshowdown.com/js/battledata.js"></script>
 <script>
 function parseCSS(code) {
-	var parsed = document.createElement('div')
+	var parsed = document.createElement('template')
 	parsed.innerHTML = code
 
 	var implDocument = document.implementation.createHTMLDocument("Temporary CSS storage")
