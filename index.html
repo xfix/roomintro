@@ -104,16 +104,15 @@ function modifyRoomIntro(action, editor) {
 	localStorage.setItem('code', rawValue)
 
 	var value = parseCSS(rawValue)
-	document.getElementById('html-caja-output').innerHTML = BattleLog.sanitizeHTML(value)
-	var sanitizer = document.createElement('div')
-	sanitizer.innerHTML = value
-	var images = sanitizer.getElementsByTagName('img')
+	var output = document.getElementById('html-caja-output')
+	output.innerHTML = BattleLog.sanitizeHTML(value)
+	var images = output.getElementsByTagName('img')
 	for (var i = 0; i < images.length; i++) {
 		var image = images[i]
 		var listener = function listener() {
 			this.setAttribute("width", this.width)
 			this.setAttribute("height", this.height)
-			updateCode(sanitizer)
+			updateCode(output)
 		}
 		removableListeners.push(function removeListenerIife(image, listener) {
 			return function removeListener() {
@@ -122,10 +121,10 @@ function modifyRoomIntro(action, editor) {
 		}(image, listener))
 		image.addEventListener('load', listener)
 	}
-	updateCode(sanitizer)
+	updateCode(output)
 }
-function updateCode(sanitizer) {
-	document.getElementById('html-intro-code').textContent = sanitizer.innerHTML
+function updateCode(output) {
+	document.getElementById('html-intro-code').textContent = output.innerHTML
 }
 var editor = ace.edit('html-editor')
 var session = editor.getSession()
