@@ -67,12 +67,12 @@ window.global = window
 </script>
 <script src="https://play.pokemonshowdown.com/js/lib/jquery-2.1.4.min.js"></script>
 <script src="https://play.pokemonshowdown.com/js/lib/html-css-sanitizer-minified.js"></script>
+<script src="https://play.pokemonshowdown.com/config/config.js"></script>
 <script src="https://play.pokemonshowdown.com/js/battledata.js"></script>
 <script>
+const domParser = new DOMParser()
 function parseCSS(code) {
-	var parsed = document.createElement('template')
-	parsed.innerHTML = code
-
+	const parsed = domParser.parseFromString(`<body>${code}`, 'text/html').body
 	var implDocument = document.implementation.createHTMLDocument("Temporary CSS storage")
 
 	var stylesheets = parsed.getElementsByTagName('style')
